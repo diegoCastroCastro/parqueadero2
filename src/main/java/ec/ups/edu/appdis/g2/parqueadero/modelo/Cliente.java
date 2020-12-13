@@ -2,15 +2,20 @@ package ec.ups.edu.appdis.g2.parqueadero.modelo;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity //jpa
 public class Cliente implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id //jpa
 	private String dni;
+	@Column(name = "tipo_documento")
 	private int tipoDocumento;
+	@Column(length = 30)
 	private String nombre;
 	private String email;
 	

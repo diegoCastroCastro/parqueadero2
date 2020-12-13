@@ -1,6 +1,7 @@
 package ec.ups.edu.appdis.g2.parqueadero.negocio;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -45,7 +46,7 @@ public class GestionTicketON implements GestionTicketONRemoto {
 			throw new Exception("Cedula incorrecta");
 		} 
 		try {
-			daoCliente.insert(cliente);
+			daoCliente.insertJPA(cliente);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,4 +78,10 @@ public class GestionTicketON implements GestionTicketONRemoto {
 		}
 		return false;
 	}
+	
+	
+	public List<Cliente> getClientesTipo1(){
+		return daoCliente.getClientes();
+	}
+	
 }
