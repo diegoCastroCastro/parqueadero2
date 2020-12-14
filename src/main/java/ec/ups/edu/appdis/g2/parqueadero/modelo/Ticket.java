@@ -1,15 +1,35 @@
 package ec.ups.edu.appdis.g2.parqueadero.modelo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Ticket {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+public class Ticket implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
+	@Id
 	private int codigo;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaIngreso;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaSalida;
 	private int tiempo;
 	private double valor;
+	
+	@OneToOne
+	@JoinColumn(name = "placa_vehiculo") //FK
 	private Vehiculo vehiculo;
+	
 	public int getCodigo() {
 		return codigo;
 	}

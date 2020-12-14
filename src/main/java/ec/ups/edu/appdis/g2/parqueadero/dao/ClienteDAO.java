@@ -51,17 +51,18 @@ public class ClienteDAO {
 	}
 
 	public boolean update(Cliente entity) {
-
+		em.merge(entity);
 		return true;
 	}
 
 	public Cliente read(int id) {
-
-		return null;
+		Cliente cliente = em.find(Cliente.class, id);
+		return cliente;
 	}
 
 	public boolean delete(int id) {
-
+		Cliente cliente = this.read(id);
+		em.remove(cliente);
 		return true;
 	}
 	

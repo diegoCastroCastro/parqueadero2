@@ -1,12 +1,14 @@
 package ec.ups.edu.appdis.g2.parqueadero.negocio;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import ec.ups.edu.appdis.g2.parqueadero.dao.ClienteDAO;
+import ec.ups.edu.appdis.g2.parqueadero.dao.TicketDAO;
 import ec.ups.edu.appdis.g2.parqueadero.dao.VehiculoDAO;
 import ec.ups.edu.appdis.g2.parqueadero.modelo.Cliente;
 import ec.ups.edu.appdis.g2.parqueadero.modelo.Ticket;
@@ -17,11 +19,26 @@ public class GestionTicketON implements GestionTicketONRemoto {
 	
 	@Inject
 	private ClienteDAO daoCliente;
+	
 	@Inject
 	private VehiculoDAO daoVehiculo;
 	
-	public boolean registrarTicket(Ticket ticket) {
-		
+	@Inject
+	private TicketDAO daoTicket;
+	
+	public boolean registrarTicket(Ticket ticket) throws Exception {
+		try {
+			Vehiculo vehiculo = ticket.getVehiculo();
+			if (daoVehiculo.read(vehiculo.getPlaca()) != null) {
+				daoVehiculo.update(vehiculo);
+			} else {
+				daoVehiculo.insertJPA(vehiculo);
+			}
+			ticket.setFechaIngreso(new Date());
+			daoTicket.insert(ticket);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
 
@@ -60,7 +77,7 @@ public class GestionTicketON implements GestionTicketONRemoto {
 	public boolean registrarVehiculo (Vehiculo vehiculo) throws Exception {
 		if (validarPlaca(vehiculo.getPlaca())) {
 			try {
-				daoVehiculo.insert(vehiculo);
+				daoVehiculo.insertJPA(vehiculo);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new Exception("Error al registrar");
